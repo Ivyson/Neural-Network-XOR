@@ -22,3 +22,4 @@ $ t = 0  \text{Time step} $
 
    
         $v_t = \beta_2 \times v_{t-1}+ (1-\beta_2)\times \(\nabla \theta_t\)^2$
+``
