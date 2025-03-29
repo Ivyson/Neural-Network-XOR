@@ -15,6 +15,8 @@ $ t = 0  \text{Time step} $
 
 1. To update the rules for each time step $t$ :
    - Compute the gradient $nabla \theta$
+  
+     
         $m_t = \beta_1 \times m_{t-1} +(1-\beta_2)\times \nabla \theta_t$
 
    
