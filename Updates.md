@@ -1,48 +1,87 @@
-1. Need to dedicate some of the operations to the GPU, Example includes Convolution
-- We can use Tensorflow specifically for optimisation of these processes, everything else can be same..
-2. Remove the duplicated functions.. 
-    - Example includes The adma optimiser function on both Conv2D and Dense Class..
-3. Fix video loading issues - current approach using JavaScript and HTML video tags isn't reliable across environments
-   - Consider using embedded images or GIFs instead of videos for demonstrations
-   - Alternatively, provide direct links to hosted videos that work in all environments
+# Non Invasive Electro-Encephalography Pipeline
+Its 2025/07/22, I am close to my death bed than i have been the past 2 months. This project is going to kill me.. If this pipeline does not work out... I am more than free to free my soul from this shitty world!
 
-4. Improve computational efficiency beyond GPU
-   - Replace manual convolution loops with vectorized operations where possible
-   - Consider using NumPy's optimized functions instead of explicit loops in MaxPool2D and other layers
-   - Pre-allocate memory for large operations to avoid repeated reallocations
+# EEG Motor Imagery Model Pipeline — Detailed TODO List
 
-5. Enhance error handling and user experience
-   - Provide more descriptive error messages for common failure modes
-   - Add progress bars using tqdm for long-running operations like training
-   - Add early stopping functionality to prevent overfitting
+## 1. File Preparation  
+- [ ] Download all EDF files for all sessions and subjects from [PhysioNet EEGMMIDB](https://physionet.org/content/eegmmidb/1.0.0/).
+- [ ] Organize files into a directory structure:
+  - Example: `data/raw/{subject_id}/{session_id}.edf`
+- [ ] Ensure that the files are not corrupted, Ensure that they downloaded successfully etc..
+- [ ] Create a mapping of runs/sessions to task types for correct label assignment (see dataset documentation).
+    - For an example
+      - T0 corresponds to rest
+      - T1 corresponds to onset of motion (real or imagined) of
+the left fist (in runs 3, 4, 7, 8, 11, and 12)
+both fists (in runs 5, 6, 9, 10, 13, and 14)
+      - T2 corresponds to onset of motion (real or imagined) of
+the right fist (in runs 3, 4, 7, 8, 11, and 12)
+both feet (in runs 5, 6, 9, 10, 13, and 14)
 
-6. Improve code organization and reusability
-   - Move the Layer classes into a separate module that can be imported
-   - Create a utility module for commonly used functions (like Adam optimizer)
-   - Create model architecture factory functions for common patterns
+## 2. Data Inspection & Quality Control  
+- [ ] For each file:
+  - [ ] Confirm the presence of annotations (`T0`, `T1`, `T2`).
+  - [ ] Visualize a handful of EEG traces to spot major artifacts or flat channels.
+  - [ ] Log or flag any files with missing channels or clear corruption for exclusion.
 
-7. Path handling improvements
-   - Add a configuration system to handle paths for different environments (local vs Colab)
-   - Use relative paths where possible to improve portability
-   - Add data download functionality to fetch datasets if not present
+## 3. Preprocessing  
+- [ ] For each EDF file, perform:
+  - [ ] Load the file using MNE-Python or equivalent.
+  - [ ] Apply a bandpass filter (e.g., 0.5–40 Hz).
+  - [ ] (Optional) Detect and remove bad channels (manual or automated).
+  - [ ] (Optional, advanced) Perform artifact removal (e.g., ICA for blinks/EOG).
+  - [ ] Save the preprocessed data (in-memory or to disk if needed).
 
-8. Visualization enhancements
-   - Add functions to visualize learned filters/kernels
-   - Implement confusion matrix visualization for classification results
-   - Create training history visualization (loss/accuracy over epochs)
+## 4. Event Annotation & Epoch Extraction  
+- [ ] Parse annotations for each file:
+  - [ ] Extract all T0, T1, and T2 events.
+  - [ ] Map each annotation to its correct class label based on the run/session.
+- [ ] For each event:
+  - [ ] Epoch the data (e.g., from event onset to 2 seconds after).
+  - [ ] Discard epochs with too much noise/artifact (if possible).
+  - [ ] Assign the correct label (rest, left, right, both, feet) to each epoch.
+  - [ ] Save each epoch and its label to disk (e.g., as `.npy`, `.h5`, or similar).
 
-9. Model architecture updates
-   - Add support for residual connections (ResNet-style)
-   - Implement batch normalization layers for improved training stability
-   - Add dropout layers to prevent overfitting
-   - Support for different padding strategies (same, valid)
+## 5. Data Aggregation  
+- [ ] Aggregate all epochs and labels from all files to create the full dataset.
+  - [ ] Ensure data format is consistent (e.g., shape: samples × channels × time).
+  - [ ] Store the dataset and a matching label vector.
 
-10. Memory management
-    - Clear memory after large operations
-    - Add option to use memory-efficient mode for large datasets
-    - Implement batch processing for prediction on large datasets
+## 6. Dataset Splitting  
+- [ ] Split the data into training, validation, and test sets.
+  - [ ] Prefer splitting by subject or session for better generalization.
+  - [ ] Ensure class balance in each split.
+  - [ ] Save split indices/lists for reproducibility.
 
-11. Testing/validation improvements
-    - Add K-fold cross-validation support
-    - Implement metrics beyond accuracy (precision, recall, F1)
-    - Add support for data augmentation during training
+## 7. Model Architecture & Data Loading  
+- [ ] Define the deep learning model (CNN, LSTM, or hybrid).
+- [ ] Implement a custom data loader to batch epochs and labels efficiently.
+- [ ] Set up input normalization/standardization logic (if needed).
+
+## 8. Model Training  
+- [ ] Set up training loop, loss function (cross-entropy), optimizer, and callbacks.
+- [ ] Train the model on the training set, validating on the validation set.
+- [ ] Log loss/accuracy and save the best-performing model checkpoint.
+- [ ] Apply early stopping or regularization as needed.
+
+## 9. Model Evaluation  
+- [ ] Evaluate the final model on the test set.
+  - [ ] Report accuracy, confusion matrix, and per-class metrics.
+  - [ ] Optionally, evaluate generalization by subject/session.
+
+## 10. Hyperparameter Tuning & Experimentation  
+- [ ] Repeat training with different:
+  - [ ] Epoch lengths, filter settings, and preprocessing steps.
+  - [ ] Model architectures (CNN-only, LSTM-only, CNN-LSTM, etc.).
+  - [ ] Regularization and augmentation strategies.
+- [ ] Record results for each experiment.
+
+## 11. Interpretation & Reporting  
+- [ ] Visualize learned model filters, activation maps, or saliency (if feasible).
+- [ ] Analyze which classes/tasks are most/least difficult for the model.
+- [ ] Document all pipeline steps, parameters, and reproducibility details.
+
+## 12. Packaging & Automation  
+- [ ] Bundle preprocessing, training, and evaluation code as scripts or notebooks.
+- [ ] Write a README explaining how to reproduce the full pipeline.
+- [ ] (Optional) Containerize or provide environment files (e.g., `requirements.txt`, `environment.yml`).
