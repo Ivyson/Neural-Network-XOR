@@ -85,3 +85,18 @@ both feet (in runs 5, 6, 9, 10, 13, and 14)
 - [ ] Bundle preprocessing, training, and evaluation code as scripts or notebooks.
 - [ ] Write a README explaining how to reproduce the full pipeline.
 - [ ] (Optional) Containerize or provide environment files (e.g., `requirements.txt`, `environment.yml`).
+
+
+# Presentation Updates
+## Semester 2 Presentation 1: 31 July 2025
+1. What Have You done So far?
+* So far, a significant chunk of my effort has been dedicated to the signal processing and classification of EEG data. I've been heavily using online datasets from sources like Physionet and Kaggle. These have been incredibly useful for cross-validating the performance of different preprocessing techniques and machine learning models. It's really helped me explore what works and what doesn't. Interestingly, only traditional machine learning models have shown any real progress in my experiments so far. Deep learning models, on the other hand, have been a bit of a challenge; they tend to decline in performance, mostly due to their hunger for very dense and extensive datasets, which isn't always easy to come by in this domain.
+2. The Current Stage of My Project?
+* Currently, I'm really looking into some advanced feature extraction techniques. In this phase, I'm trying to design specific preprocessing steps tailored for each individual,
+based on the unique nature of their brain waves. It's a bit like custom-fitting a solution rather than using a one-size-fits-all approach. This personalized strategy comes from a
+key understanding: human brains are incredibly diverse, and what works for one person might not work for another. Factors like variations in skull thickness – some people might
+literally have thinner head skin, which affects how EEG signals are picked up – mean that a generalized approach often falls short. 
+3. Current Challenges I Am Facing
+* The major challenge so far has been the chance level accuracies on trained models, If a model performs reasonable on one subject, it shows very significant decline when being validated on a different subject, and the reason for this is as mentioned above with respect to brain structure variability, So, but I am still consulting previous research done on familiar datasets to find out how was this overcome.
+4.  Next Steps I Am Planning To Take
+* I am planning on exploring more complex deep learning models than just a Linear Discrimant Analysis and Common Spatial Patterns(PSD), One architecture that has peaked my interest is the combination of a convolutional Nueral network + Long-Short Term Memery Architecture due to its ability to capture both the temporal and Spatial resolution of the dataset.
