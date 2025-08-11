@@ -86,12 +86,12 @@ def train_csp_lda(X, y, n_csp=8):
     return csp, lda
 
 
-def save_models(csp, lda, csp_path="csp_model.joblib", lda_path="lda_model.joblib"):
+def save_models(csp, lda, csp_path="../assets/Models/csp_model.joblib", lda_path="../assets/Models/lda_model.joblib"):
     joblib.dump(csp, csp_path)
     joblib.dump(lda, lda_path)
 
 
-def load_models(csp_path="csp_model.joblib", lda_path="lda_model.joblib"):
+def load_models(csp_path="../assets/Models/csp_model.joblib", lda_path="../assets/Models/lda_model.joblib"):
     csp = joblib.load(csp_path)
     lda = joblib.load(lda_path)
     return csp, lda
