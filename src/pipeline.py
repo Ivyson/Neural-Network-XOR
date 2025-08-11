@@ -83,3 +83,5 @@ class Pipeline:
 # Usage of the classs : Example  
 #pipeline = Pipeline(subjects=[1], runs=[1, 3, 5, 7, 8, 10])
 #print(pipeline.Y)
+#print(pipeline.X.shape)
+#print(pipeline.Y.shape)
